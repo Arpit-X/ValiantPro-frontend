@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ValiantPro</title>
+    <style>
+
+    </style>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+</head>
+<body>
+    <script>
+        $(document).ready(function(){
+            
+            function get_creds(){
+                var username = $("#username").val()
+                var password = $("#pass").val()
+
+            $.ajax({
+                type:"POST",
+                url:'http://localhost:8000/api-token-auth/',
+                data:'username='+username+'&password='+password+'',
+                success:function(result){
+                    localStorage.setItem("auth_token",result['token']);
+                    localStorage.setItem("username",username) 
+                    window.location = "getUserStats.html" 
+                },
+                error:function(xht,status,err){
+                    alert("error");
+                }
+            });
+            }
+            $('button').click(get_creds);
+        });
+    </script>   
+    <div>
+        <input type="text" placeholder="username" id="username">
+        <input type="password"  placeholder="password" id="pass">
+        <button>Log in</button>
+    </div>
+</body>
+</html>
