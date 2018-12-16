@@ -9,18 +9,94 @@
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="qrcode.js"></script>
-    <script type="module" src="qr-scanner.min.js"></script>
+    <script type="text/javascript" src="instascan.min.js"></script>
+    <style>
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <script>
+        
         $(document).ready(function(){
+        var modal = document.getElementById('myModal');
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            $("#modal_content").empty();
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                $("#modal_content").empty();
+                modal.style.display = "none";
+            }
+        }
+            let scanner = new Instascan.Scanner({continuous:true, video: document.getElementById('preview') });
+            scanner.addListener('scan', function (content) {
+                console.log(content);
+                var code = $("#Ecode").val();
+                $.ajax({
+                    url: "http://localhost:8000/events/api/register/"+code+"/"+content,
+                    headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
+                    type: "GET",
+                    success:function(result){
+                        var text = $('<p id="modal_text">'+result['participant']['user']['username']+' sucessfully registered for  '+result['event']['name']+'</p>');
+                        $("#modal_content").append(text);
+                        $("#modal_text").css({"color":"green"});
+                        modal.style.display = "block";
+                    },
+                    error:function(xht,status,err){
+                        var text = $('<p id="modal_text">Error occured while registering. Check if you have filled the event code correctly or verify the qr code</p>');
+                        $("#modal_content").append(text);
+                        $("#modal_text").css({"color":"red"});
+                        modal.style.display = "block";
+                    },
+                    async: false
+                });
+                $('#preview').hide();
+                scanner.stop()
+            });
             var qrcode = new QRCode(document.getElementById("qrcode"), {
                 width : 100,
                 height : 100
             });
             var user_id, isCoordinator;
-            $('#register').hide()
-
+            $('#forCoord').hide()
+            $('#preview').hide()
             var fill_details = function(jsonObj){
                 $('#userDetails').append(
                     `
@@ -41,29 +117,52 @@
                     isCoordinator = result['isCoordinator'];
                     fill_details(result);
                     if(isCoordinator) {
-                        $('#register').show();
+                        $('#forCoord').show();
                     }
                 },
                 error:function(xht,status,err){
-                    alert("error"+xht.resposeText);
+                    alert("error getting user details");
                 },
-                
-
             });
             $('#GetQr').click(function(){
                 qrcode.makeCode(user_id+"");  
             });
             $('#register').click(function(){
-                const qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
+                $('#preview').show()
+                Instascan.Camera.getCameras().then(function (cameras) {
+                    if (cameras.length > 0) {
+                    scanner.start(cameras[0]);
+                    } else {
+                    console.error('No cameras found.');
+                    }
+                }).catch(function (e) {
+                    console.error(e);
+                });
             });
         });
         
     </script>
-    <video></video>
-    <button id="register">Register User</button>
+    <video id="preview"></video>
+    <div id="forCoord">
+            <input type="text" id="Ecode" placeholder="You Event Code">
+            <button id="register">Register User</button>        
+    </div>
     <div id="userDetails">
     </div>
     <button id="GetQr">Get QR</button>
     <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+    <!-- Trigger/Open The Modal -->
+
+    <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modal_content">
+
+        </div>
+    </div>
+
+    </div>
 </body>
 </html>
