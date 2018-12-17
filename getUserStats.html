@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User Details</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <title>ValiantPro</title>
+    <link rel="stylesheet" href="valiantPro.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="qrcode.js"></script>
     <script type="text/javascript" src="instascan.min.js"></script>
@@ -51,6 +51,10 @@
 </head>
 <body>
     <script>
+        if (localStorage['auth_token'] === undefined){
+            window.location = "index.html"
+        }
+
         const host = "localhost:8000";
         $(document).ready(function(){
         var modal = document.getElementById('myModal');
@@ -100,10 +104,10 @@
             var fill_details = function(jsonObj){
                 $('#userDetails').append(
                     `
-                    <p><strong>Username : </strong>${jsonObj['user']['username']}</p>
-                    <p><strong>Phone : </strong>${jsonObj['phone']}</p>
-                    <p><strong>Email : </strong>${jsonObj['user']['email']}</p>
-                    <p><strong>College : </strong>${jsonObj['college']}</p>
+                    <p class="card-title"><strong>Username : </strong>${jsonObj['user']['username']}</p>
+                    <p class="card-text" ><strong>Phone : </strong>${jsonObj['phone']}</p>
+                    <p class="card-text"><strong>Email : </strong>${jsonObj['user']['email']}</p>
+                    <p class="card-text"><strong>College : </strong>${jsonObj['college']}</p>
                     `
                 );
             }
@@ -177,39 +181,53 @@
                         alert("error stats");
                     },
                 });
-                $('#clear').click(function(){
+                
+            });
+            $('#clear').click(function(){
                     $('#stats').empty();
-                })
+            });
+            $('#logout').click(function(){
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('username');
+                window.location = 'index.html';
             });
         });
         
     </script>
-    <video id="preview"></video>
-    <div id="forCoord">
-            <input type="text" id="Ecode" placeholder="You Event Code">
-            <button id="register">Register User</button>
-            <button id="getStats">See Participans</button>
-            <button id="clear">Clear</button>        
-            <table id="stats">
-                
-            </table>        
-    </div>
-    <div id="userDetails">
-    </div>
-    <button id="GetQr">Get QR</button>
-    <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
-    <!-- Trigger/Open The Modal -->
-
-    <div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div id="modal_content">
-
-        </div>
-    </div>
-
+    <button id="logout" class="btn btn-danger float-right">Log Out</button>
+    <div class="container"> 
+            
+            <video id="preview"></video>
+            <div id="forCoord">
+                    <div class="form-group">
+                        <input type="text" id="Ecode" class="form-control" placeholder="You Event Code">
+                    </div>
+                    <button id="register"class="btn btn-success">Register User</button>
+                    <div class="btn-group" id="stats_control">
+                        <button id="getStats" class="btn btn-warning    ">See Participans</button>
+                        <button id="clear" class="btn btn-link">Clear</button>
+                    </div>        
+                    <table id="stats" class="table table-dark table-hover table-responsive-lg">
+                        
+                    </table>        
+            </div>
+            <div id="userDetails" class="card">
+            </div>
+            <button id="GetQr" class="btn btn-primary">Get QR</button>
+            <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+            <!-- Trigger/Open The Modal -->
+        
+            <div id="myModal" class="modal">
+        
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="modal_content">
+        
+                </div>
+            </div>
+        
+            </div>
     </div>
 </body>
 </html>
