@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Pacifico');
 html, body{
 
     background: #fc4a1a;  /* fallback for old browsers */
@@ -17,7 +18,7 @@ html{
 }
 #userDetails{
     padding:20px;
-    margin-top:10px;
+    margin-top:20%;
 }
 #forCoord{
     background: white;
@@ -52,4 +53,10 @@ html{
 #preview{
     margin-top:20%;
     width:100%;
+}
+#logo{
+    font-family: 'Pacifico', cursive;
+    color:white;
+    margin-top:20px;
+    margin-left:20px
 }
