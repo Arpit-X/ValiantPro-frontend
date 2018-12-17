@@ -51,7 +51,7 @@
 </head>
 <body>
     <script>
-        
+        const host = "localhost:8000";
         $(document).ready(function(){
         var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
@@ -70,7 +70,7 @@
                 console.log(content);
                 var code = $("#Ecode").val();
                 $.ajax({
-                    url: "http://localhost:8000/events/api/register/"+code+"/"+content,
+                    url: "http://"+host+"/events/api/register/"+code+"/"+content,
                     headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
                     type: "GET",
                     success:function(result){
@@ -109,7 +109,7 @@
             }
             
             $.ajax({
-                url: "http://localhost:8000/events/api/user-details/"+localStorage.getItem('username')+"",
+                url: "http://"+host+"/events/api/user-details/"+localStorage.getItem('username')+"",
                 headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
                 type: "GET",
                 success:function(result){
@@ -143,7 +143,7 @@
                 var table = $('#stats');
                 var code = $('#Ecode').val();
                 $.ajax({
-                    url: "http://localhost:8000/events/api/stats/event/"+code+"",
+                    url: "http://"+host+"/events/api/stats/event/"+code+"",
                     headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
                     type: "GET",
                     success:function(result){
