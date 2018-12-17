@@ -139,13 +139,60 @@
                     console.error(e);
                 });
             });
+            $('#getStats').click(function(){
+                var table = $('#stats');
+                var code = $('#Ecode').val();
+                $.ajax({
+                    url: "http://localhost:8000/events/api/stats/event/"+code+"",
+                    headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
+                    type: "GET",
+                    success:function(result){
+                        $('#stats').empty();
+                        $('#stats').append(`
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>College</th>
+                                </tr>
+                            </thead>
+                        `);
+                        
+                        $.each(result,function(index,value){
+                            var row =`
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${value['participant']['user']['username']}</td>
+                                <td>${value['participant']['user']['email']}</td>
+                                <td>${value['participant']['phone']}</td>
+                                <td>${value['participant']['college']}</td>
+                            </tr>
+                            `;
+                            $('#stats').append(row);
+                        });
+                    },
+                    error:function(xht,status,err){
+                        alert("error stats");
+                    },
+                });
+                $('#clear').click(function(){
+                    $('#stats').empty();
+                })
+            });
         });
         
     </script>
     <video id="preview"></video>
     <div id="forCoord">
             <input type="text" id="Ecode" placeholder="You Event Code">
-            <button id="register">Register User</button>        
+            <button id="register">Register User</button>
+            <button id="getStats">See Participans</button>
+            <button id="clear">Clear</button>        
+            <table id="stats">
+                
+            </table>        
     </div>
     <div id="userDetails">
     </div>
