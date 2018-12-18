@@ -18,13 +18,13 @@ html{
 }
 #userDetails{
     padding:20px;
-    margin-top:20%;
+    margin-top:5%;
 }
 #forCoord{
     background: white;
     padding:20px;
     border-radius:5px;
-    margin-top:20%;
+/*     margin-top:%; */
 
 }
 #stats{
@@ -59,4 +59,7 @@ html{
     color:white;
     margin-top:20px;
     margin-left:20px
+}
+#qrcode{
+    margin: 2% 40%; 
 }
