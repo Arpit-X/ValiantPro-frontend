@@ -29,7 +29,7 @@
 
             $.ajax({
                 type:"POST",
-                url:'http://localhost:8000/api-token-auth/',
+                url:' http://localhost:8000/api-token-auth/',
                 data:'username='+username+'&password='+password+'',
                 success:function(result){
                     localStorage.setItem("auth_token",result['token']);
@@ -60,5 +60,6 @@
                 <button id="register" class="btn btn-success">Register</button>
             </div>
     </div>
+    
 </body>
 </html>
