@@ -29,7 +29,7 @@
 
             $.ajax({
                 type:"POST",
-                url:' http://52.66.78.115:5000/api-token-auth/',
+                url:'https://valiant2k18.tk/api-token-auth/',
                 data:'username='+username+'&password='+password+'',
                 success:function(result){
                     localStorage.setItem("auth_token",result['token']);

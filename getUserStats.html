@@ -56,7 +56,7 @@
             window.location = "index.html"
         }
 
-        const host = "52.66.78.115:5000";
+        const host = "https://valiant2k18.tk";
         $(document).ready(function(){
         var modal = document.getElementById('myModal');
         var span = document.getElementsByClassName("close")[0];
@@ -75,7 +75,7 @@
                 console.log(content);
                 var code = $("#Ecode").val();
                 $.ajax({
-                    url: "http://"+host+"/events/api/register/"+code+"/"+content,
+                    url: host+"/events/api/register/"+code+"/"+content,
                     headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
                     type: "GET",
                     success:function(result){
@@ -114,7 +114,7 @@
             }
             
             $.ajax({
-                url: "http://"+host+"/events/api/user-details/"+localStorage.getItem('username')+"",
+                url: host+"/events/api/user-details/"+localStorage.getItem('username')+"",
                 headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
                 type: "GET",
                 success:function(result){
@@ -148,7 +148,7 @@
                 var table = $('#stats');
                 var code = $('#Ecode').val();
                 $.ajax({
-                    url: "http://"+host+"/events/api/stats/event/"+code+"",
+                    url: host+"/events/api/stats/event/"+code+"",
                     headers: {"Authorization": "Token "+localStorage.getItem('auth_token')},
                     type: "GET",
                     success:function(result){
